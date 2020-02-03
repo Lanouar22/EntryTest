@@ -4,10 +4,10 @@ Cet API a été réalisé avec node et express
 
 # Comment utiliser le projet :
 
-git clone "url_du_project"
-npm install
-npm start
-utiliser curl ou postman ou firefox developper edition pour aller à l'url : http://localhost:50041/api/flights
+* git clone "url_du_project"
+* npm install
+* npm start
+* utiliser curl ou postman ou firefox developper edition pour aller à l'url : http://localhost:50041/api/flights
 
 # Solutions des problématiques :
 
