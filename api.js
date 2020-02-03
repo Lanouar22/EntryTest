@@ -5,19 +5,18 @@ const PORT = 50041;
 const apiKey = "dd764f40"
 const urlAirJazz = "https://my.api.mockaroo.com/air-jazz/flights"
 const urlAirMoon = "https://my.api.mockaroo.com/air-moon/flights"
-//const urlAirBeam = "https://my.api.mockaroo.com/air-beam/flights"
-//bad adress to test error API
 const urlAirBeam = "https://my.api.mockaroo.com/air-beam/flights"
 
 // Set up the express app
 const app = express()
 
-// Get all fligths
+// Get all fligths from the 3 external APIs
 app.get('/api/flights', async (req, res) => {
     let result = []
     let promise1 = getDataExternalAPI(apiKey, urlAirJazz)
     let promise2 = getDataExternalAPI(apiKey, urlAirMoon)
     let promise3 = getDataExternalAPI(apiKey, urlAirBeam)
+    // fetch the 3 external APIs in parallel
     await Promise.all([promise1, promise2, promise3])
     .then(res => {
         res.forEach(e => {
@@ -29,14 +28,14 @@ app.get('/api/flights', async (req, res) => {
         data: result
     })
 })
-
+// Sort the table of the global API
 function sortAndSplice(tab) {
     tab.sort((a, b) => {
         return(a.price - b.price)
     })
     return tab.slice(0, 50)
 }
-
+// transforming the air beam from csv to json
 async function  csvTransform(data) {
     return await csvtojson()
         .fromString(data)
@@ -93,6 +92,7 @@ async function getDataExternalAPI(apiKey, url) {
         }
         return tab
     }).catch(e => {
+        // blocking the API with bad gateway problem
         console.log('Api request is not working, error code', e.response.status)
         return([])
     })
@@ -101,3 +101,11 @@ async function getDataExternalAPI(apiKey, url) {
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`)
 })
+// API time limiter using express-rate-limit
+//const rateLimit = require("express-rate-limit");
+  
+//const apiLimiter = rateLimit({
+//  windowMs: 15 * 60 * 1000, // 15 minutes
+//  max: 10 // start blocking after 10 requests
+//});
+//app.use("/api/", apiLimiter);
