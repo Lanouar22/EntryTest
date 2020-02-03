@@ -1,6 +1,7 @@
 # EntryTest
 
 Cet API a été réalisé avec node et express
+le travail a été réalisé dans le fichier api.js
 
 # Comment utiliser le projet :
 
